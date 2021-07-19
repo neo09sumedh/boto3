@@ -1,0 +1,20 @@
+import boto3
+from pprint import pprint
+s3_sess=boto3.session.Session(profile_name="applicationDev")
+s3_conn=s3_sess.resource("s3")
+
+bucket_name=[]
+for each_bucket in s3_conn.meta.client.list_buckets().get("Buckets"):
+    bucket_name.append(each_bucket)
+    
+    for bucket in bucket_name:
+        paginator = s3_conn.meta.client.get_paginator('list_objects')
+        print("Bucket in My Account{}".format(bucket['Name']))
+        for each in paginator.paginate(Bucket=bucket['Name']):
+            for s3_key in each['Contents']:
+                  pprint(s3_key['Key'])
+            
+
+
+    
+        
